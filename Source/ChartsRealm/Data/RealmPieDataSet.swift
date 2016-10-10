@@ -56,6 +56,7 @@ open class RealmPieDataSet: RealmBaseDataSet, IPieChartDataSet
     // MARK: - Styling functions and accessors
     
     fileprivate var _sliceSpace = CGFloat(0.0)
+    fileprivate var _selectionSliceSpace = CGFloat(0.0)
     
     /// the space in pixels between the pie-slices
     /// **default**: 0
