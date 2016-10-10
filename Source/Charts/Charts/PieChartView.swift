@@ -231,7 +231,23 @@ open class PieChartView: PieRadarChartViewBase
             }
         }
     }
-    
+
+    open func animateHighlight(duration: TimeInterval) {
+        guard let lighter = self.highlighter as? PieHighlighter
+            , let dataSet = self.data?.dataSets[0]
+            else { return }
+
+        var highs = [Highlight]()
+        for index in 0..<dataSet.entryCount {
+            if let highlight = lighter.closestHighlight(index: index, x: 0, y: 0) {
+                highs.append(highlight)
+            }
+        }
+
+        self.highlightValues(highs)
+        _animator.animate(dimension: .h, duration: duration)
+    }
+
     /// Checks if the given index is set to be highlighted.
     open func needsHighlight(index: Int) -> Bool
     {
