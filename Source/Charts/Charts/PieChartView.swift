@@ -72,6 +72,16 @@ open class PieChartView: PieRadarChartViewBase
     /// maximum angle for this pie
     fileprivate var _maxAngle: CGFloat = 360.0
 
+    /// draw shadows under pie slices
+    fileprivate var _drawShadowsEnabled: Bool = false
+
+    /// Shadow offset, default value = 0, 10
+    fileprivate var _shadowOffset: CGSize = CGSize(width: 0, height: 10)
+
+    /// Shadow blur, default value = 10
+    fileprivate var _shadowBlur: CGFloat = 10
+
+
     public override init(frame: CGRect)
     {
         super.init(frame: frame)
@@ -632,6 +642,51 @@ open class PieChartView: PieRadarChartViewBase
         {
             _centerTextRadiusPercent = newValue
             setNeedsDisplay()
+        }
+    }
+
+    open var drawShadowsEnabled: Bool
+        {
+        get
+        {
+            return _drawShadowsEnabled
+        }
+        set
+        {
+            _drawShadowsEnabled = newValue
+            setNeedsDisplay()
+        }
+    }
+
+    open var shadowOffset: CGSize
+        {
+        get
+        {
+            return _shadowOffset
+        }
+        set
+        {
+            _shadowOffset = newValue
+            if _drawShadowsEnabled
+            {
+                setNeedsDisplay()
+            }
+        }
+    }
+
+    open var shadowBlur: CGFloat
+        {
+        get
+        {
+            return _shadowBlur
+        }
+        set
+        {
+            _shadowBlur = newValue
+            if _drawShadowsEnabled
+            {
+                setNeedsDisplay()
+            }
         }
     }
     

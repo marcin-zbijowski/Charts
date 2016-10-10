@@ -124,7 +124,10 @@ open class PieChartRenderer: DataRenderer
         let radius = chart.radius
         let drawInnerArc = chart.drawHoleEnabled && !chart.drawSlicesUnderHoleEnabled
         let userInnerRadius = drawInnerArc ? radius * chart.holeRadiusPercent : 0.0
-        
+        let drawShadows = chart.drawShadowsEnabled
+        let shadowOffset = chart.shadowOffset
+        let shadowBlur = chart.shadowBlur
+
         var visibleAngleCount = 0
         for j in 0 ..< entryCount
         {
@@ -152,7 +155,11 @@ open class PieChartRenderer: DataRenderer
                 if !chart.needsHighlight(index: j)
                 {
                     let accountForSliceSpacing = sliceSpace > 0.0 && sliceAngle <= 180.0
-                    
+
+                    if drawShadows {
+                        context.setShadow(offset: shadowOffset, blur: shadowBlur, color: dataSet.color(atIndex: j).withAlphaComponent(0.3).cgColor)
+                    }
+
                     context.setFillColor(dataSet.color(atIndex: j).cgColor)
                     
                     let sliceSpaceAngleOuter = visibleAngleCount == 1 ?
@@ -656,8 +663,9 @@ open class PieChartRenderer: DataRenderer
         
         context.saveGState()
         
-        let phaseX = animator.phaseX
-        let phaseY = animator.phaseY
+        let phaseX = animator.phase(dimension: .x)
+        let phaseY = animator.phase(dimension: .y)
+        let phaseH = animator.phase(dimension: .h)
         
         var angle: CGFloat = 0.0
         let rotationAngle = chart.rotationAngle
@@ -668,7 +676,10 @@ open class PieChartRenderer: DataRenderer
         let radius = chart.radius
         let drawInnerArc = chart.drawHoleEnabled && !chart.drawSlicesUnderHoleEnabled
         let userInnerRadius = drawInnerArc ? radius * chart.holeRadiusPercent : 0.0
-        
+        let drawShadows = chart.drawShadowsEnabled
+        let shadowOffset = chart.shadowOffset
+        let shadowBlur = chart.shadowBlur
+
         for i in 0 ..< indices.count
         {
             // get the index to highlight
@@ -705,16 +716,21 @@ open class PieChartRenderer: DataRenderer
                 angle = absoluteAngles[index - 1] * CGFloat(phaseX)
             }
             
-            let sliceSpace = visibleAngleCount <= 1 ? 0.0 : set.sliceSpace
-            
+            let sliceSpace = visibleAngleCount <= 1 ? 0.0 : CGFloat(abs(set.sliceSpace - set.selectionSliceSpace)) * CGFloat(phaseH)
+
+            let innerShift = set.innerSelectionShift
             let sliceAngle = drawAngles[index]
-            var innerRadius = userInnerRadius
+            var innerRadius = userInnerRadius + innerShift * CGFloat(phaseH)
             
             let shift = set.selectionShift
             let highlightedRadius = radius + shift
             
             let accountForSliceSpacing = sliceSpace > 0.0 && sliceAngle <= 180.0
             
+            if drawShadows {
+                context.setShadow(offset: shadowOffset, blur: shadowBlur, color: set.color(atIndex: index).withAlphaComponent(0.3).cgColor)
+            }
+
             context.setFillColor(set.color(atIndex: index).cgColor)
             
             let sliceSpaceAngleOuter = visibleAngleCount == 1 ?
