@@ -27,6 +27,9 @@ public protocol IPieChartDataSet: IChartDataSet
     var sliceSpace: CGFloat { get set }
     var selectionSliceSpace: CGFloat { get set }
     
+    /// When enabled, slice spacing will be 0.0 when the smallest value is going to be smaller than the slice spacing itself.
+    var automaticallyDisableSliceSpacing: Bool { get set }
+    
     /// indicates the selection distance of a pie slice
     var selectionShift: CGFloat { get set }
     var innerSelectionShift: CGFloat { get set }
