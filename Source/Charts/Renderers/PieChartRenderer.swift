@@ -281,9 +281,10 @@ open class PieChartRenderer: DataRenderer
         var drawAngles = chart.drawAngles
         var absoluteAngles = chart.absoluteAngles
         
-        let phaseX = animator.phaseX
-        let phaseY = animator.phaseY
-        
+        let phaseX = animator.phase(dimension: .x)
+        let phaseY = animator.phase(dimension: .y)
+        let phaseH = animator.phase(dimension: .h)
+
         var labelRadiusOffset = radius / 10.0 * 3.0
         
         if chart.drawHoleEnabled
@@ -334,6 +335,8 @@ open class PieChartRenderer: DataRenderer
             {
                 guard let e = dataSet.entryForIndex(j) else { continue }
                 let pe = e as? PieChartDataEntry
+
+                let entryNeedsHighlight = chart.needsHighlight(index: j)
                 
                 if xIndex == 0
                 {
@@ -352,8 +355,8 @@ open class PieChartRenderer: DataRenderer
                 let angleOffset = (sliceAngle - sliceSpaceMiddleAngle / 2.0) / 2.0
 
                 angle = angle + angleOffset
-                
-                let transformedAngle = rotationAngle + angle * CGFloat(phaseY)
+
+                let transformedAngle = rotationAngle + angle * CGFloat(phaseY) + (entryNeedsHighlight ? dataSet.selectionShift * CGFloat(phaseH): 0)
                 
                 let value = usePercentValuesEnabled ? e.y / yValueSum * 100.0 : e.y
 
@@ -394,6 +397,9 @@ open class PieChartRenderer: DataRenderer
                     {
                         line1Radius = radius * valueLinePart1OffsetPercentage
                     }
+                    if entryNeedsHighlight {
+                        line1Radius += dataSet.selectionShift
+                    }
                     
                     let polyline2Length = dataSet.valueLineVariableLength
                         ? labelRadius * valueLineLength2 * abs(sin(transformedAngle * ChartUtils.Math.FDEG2RAD))
@@ -406,20 +412,20 @@ open class PieChartRenderer: DataRenderer
                     let pt1 = CGPoint(
                         x: labelRadius * (1 + valueLineLength1) * sliceXBase + center.x,
                         y: labelRadius * (1 + valueLineLength1) * sliceYBase + center.y)
-                    
+
                     if transformedAngle.truncatingRemainder(dividingBy: 360.0) >= 90.0 && transformedAngle.truncatingRemainder(dividingBy: 360.0) <= 270.0
                     {
                         pt2 = CGPoint(x: pt1.x - polyline2Length, y: pt1.y)
                         align = .right
-                        labelPoint = CGPoint(x: pt2.x - 5, y: pt2.y - lineHeight)
+                        labelPoint = CGPoint(x: pt2.x - 15, y: pt2.y - (lineHeight < entryLineHeight ? entryLineHeight : lineHeight))
                     }
                     else
                     {
                         pt2 = CGPoint(x: pt1.x + polyline2Length, y: pt1.y)
                         align = .left
-                        labelPoint = CGPoint(x: pt2.x + 5, y: pt2.y - lineHeight)
+                        labelPoint = CGPoint(x: pt2.x + 15, y: pt2.y - (lineHeight < entryLineHeight ? entryLineHeight : lineHeight))
                     }
-                    
+
                     if dataSet.valueLineColor != nil
                     {
                         context.setStrokeColor(dataSet.valueLineColor!.cgColor)
