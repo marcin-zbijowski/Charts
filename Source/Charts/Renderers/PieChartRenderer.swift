@@ -323,8 +323,10 @@ open class PieChartRenderer: DataRenderer
             let yValuePosition = dataSet.yValuePosition
             
             let valueFont = dataSet.valueFont
-            let entryLabelFont = dataSet.entryLabelFont
+            let entryLabelFont = dataSet.entryLabelFont ?? valueFont
             let lineHeight = valueFont.lineHeight
+            let entryLineHeight = entryLabelFont.lineHeight
+            let drawLabelAboveValue = dataSet.drawLabelAboveValue
             
             guard let formatter = dataSet.valueFormatter else { continue }
             
@@ -354,12 +356,13 @@ open class PieChartRenderer: DataRenderer
                 let transformedAngle = rotationAngle + angle * CGFloat(phaseY)
                 
                 let value = usePercentValuesEnabled ? e.y / yValueSum * 100.0 : e.y
+
                 let valueText = formatter.stringForValue(
                     value,
                     entry: e,
                     dataSetIndex: i,
                     viewPortHandler: viewPortHandler)
-                
+
                 let sliceXBase = cos(transformedAngle * ChartUtils.Math.FDEG2RAD)
                 let sliceYBase = sin(transformedAngle * ChartUtils.Math.FDEG2RAD)
                 
@@ -434,23 +437,24 @@ open class PieChartRenderer: DataRenderer
                         ChartUtils.drawText(
                             context: context,
                             text: valueText,
-                            point: labelPoint,
+                            point: CGPoint(x: labelPoint.x, y: labelPoint.y + (drawLabelAboveValue ? entryLineHeight : 0)),
                             align: align,
                             attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: valueTextColor]
                         )
-                        
+
                         if j < data.entryCount && pe?.label != nil
                         {
                             ChartUtils.drawText(
                                 context: context,
                                 text: pe!.label!,
-                                point: CGPoint(x: labelPoint.x, y: labelPoint.y + lineHeight),
+                                point: CGPoint(x: labelPoint.x, y: labelPoint.y + (drawLabelAboveValue ? 0 : lineHeight)),
                                 align: align,
                                 attributes: [
-                                    NSFontAttributeName: entryLabelFont ?? valueFont,
+                                    NSFontAttributeName: entryLabelFont,
                                     NSForegroundColorAttributeName: entryLabelColor ?? valueTextColor]
                             )
                         }
+
                     }
                     else if drawXOutside
                     {
@@ -462,7 +466,7 @@ open class PieChartRenderer: DataRenderer
                                 point: CGPoint(x: labelPoint.x, y: labelPoint.y + lineHeight / 2.0),
                                 align: align,
                                 attributes: [
-                                    NSFontAttributeName: entryLabelFont ?? valueFont,
+                                    NSFontAttributeName: entryLabelFont,
                                     NSForegroundColorAttributeName: entryLabelColor ?? valueTextColor]
                             )
                         }
@@ -503,7 +507,7 @@ open class PieChartRenderer: DataRenderer
                                 point: CGPoint(x: x, y: y + lineHeight),
                                 align: .center,
                                 attributes: [
-                                    NSFontAttributeName: entryLabelFont ?? valueFont,
+                                    NSFontAttributeName: entryLabelFont,
                                     NSForegroundColorAttributeName: entryLabelColor ?? valueTextColor]
                             )
                         }
@@ -518,7 +522,7 @@ open class PieChartRenderer: DataRenderer
                                 point: CGPoint(x: x, y: y + lineHeight / 2.0),
                                 align: .center,
                                 attributes: [
-                                    NSFontAttributeName: entryLabelFont ?? valueFont,
+                                    NSFontAttributeName: entryLabelFont,
                                     NSForegroundColorAttributeName: entryLabelColor ?? valueTextColor]
                             )
                         }

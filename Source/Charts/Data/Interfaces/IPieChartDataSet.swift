@@ -60,4 +60,8 @@ public protocol IPieChartDataSet: IChartDataSet
     
     /// the color for the slice-text labels
     var entryLabelColor: NSUIColor? { get set }
+
+    /// if both value and label are placed outside, which one should be on top
+    var drawLabelAboveValue: Bool { get set }
+
 }

@@ -136,7 +136,10 @@ open class RealmPieDataSet: RealmBaseDataSet, IPieChartDataSet
     
     /// the color for the slice-text labels
     open var entryLabelColor: NSUIColor? = nil
-    
+
+    /// if both value and label are placed outside, which one should be on top
+    open var drawLabelAboveValue: Bool = true
+
     // MARK: - NSCopying
     
     open override func copyWithZone(_ zone: NSZone?) -> AnyObject
