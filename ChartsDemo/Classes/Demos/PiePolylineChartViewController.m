@@ -81,7 +81,8 @@
     
     for (int i = 0; i < count; i++)
     {
-        [entries addObject:[[PieChartDataEntry alloc] initWithValue:(arc4random_uniform(mult) + mult / 5) label:parties[i % parties.count]]];
+        PieChartDataEntry *entry = [[PieChartDataEntry alloc] initWithValue:(arc4random_uniform(mult) + mult / 5) label:parties[i % parties.count]];
+        [entries addObject:entry];
     }
     
     PieChartDataSet *dataSet = [[PieChartDataSet alloc] initWithValues:entries label:@"Election Results"];
@@ -98,6 +99,9 @@
     [colors addObject:[UIColor colorWithRed:51/255.f green:181/255.f blue:229/255.f alpha:1.f]];
     
     dataSet.colors = colors;
+    dataSet.entryLabelColor = [UIColor colorWithWhite:0.5 alpha:1.0];
+    dataSet.entryLabelFont = [UIFont systemFontOfSize:14.f];
+    dataSet.drawLabelAboveValue = YES;
     
     dataSet.valueLinePart1OffsetPercentage = 0.8;
     dataSet.valueLinePart1Length = 0.2;
@@ -118,7 +122,8 @@
     pFormatter.multiplier = @1.f;
     pFormatter.percentSymbol = @" %";
     [data setValueFormatter:[[ChartDefaultValueFormatter alloc] initWithFormatter:pFormatter]];
-    [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:11.f]];
+//    [data setValueFont:[UIFont fontWithName:@"HelveticaNeue-Light" size:11.f]];
+    [data setValueFont:[UIFont systemFontOfSize:20.f]];
     [data setValueTextColor:UIColor.blackColor];
     
     _chartView.data = data;
