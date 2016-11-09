@@ -27,6 +27,7 @@
     self.title = @"Pie Bar Chart";
     
     self.options = @[
+                     @{@"key": @"animateHighlight", @"label": @"Animate highlight"},
                      @{@"key": @"toggleValues", @"label": @"Toggle Y-Values"},
                      @{@"key": @"toggleXValues", @"label": @"Toggle X-Values"},
                      @{@"key": @"togglePercent", @"label": @"Toggle Percent"},
@@ -44,6 +45,7 @@
     
     _chartView.legend.enabled = NO;
     _chartView.delegate = self;
+    _chartView.holeColor = nil;
     
     [_chartView setExtraOffsetsWithLeft:20.f top:0.f right:20.f bottom:0.f];
     
@@ -100,9 +102,14 @@
     dataSet.valueLinePart1OffsetPercentage = 0.8;
     dataSet.valueLinePart1Length = 0.2;
     dataSet.valueLinePart2Length = 0.4;
-    //dataSet.xValuePosition = PieChartValuePositionOutsideSlice;
+    dataSet.xValuePosition = PieChartValuePositionOutsideSlice;
     dataSet.yValuePosition = PieChartValuePositionOutsideSlice;
-    
+    dataSet.valueLineColor = nil;
+
+    dataSet.innerSelectionShift = dataSet.selectionShift;
+    dataSet.selectionSliceSpace = 20;
+
+
     PieChartData *data = [[PieChartData alloc] initWithDataSet:dataSet];
     
     NSNumberFormatter *pFormatter = [[NSNumberFormatter alloc] init];
@@ -175,7 +182,14 @@
         [_chartView spinWithDuration:2.0 fromAngle:_chartView.rotationAngle toAngle:_chartView.rotationAngle + 360.f];
         return;
     }
-    
+
+    if ([key isEqualToString:@"animateHighlight"])
+    {
+        [_chartView animateHighlightWithDuration:0.33];
+        return;
+    }
+
+
     [super handleOption:key forChartView:_chartView];
 }
 

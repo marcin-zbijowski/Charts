@@ -724,7 +724,7 @@ open class PieChartRenderer: DataRenderer
             var innerRadius = userInnerRadius + innerShift * CGFloat(phaseH)
             
             let shift = set.selectionShift
-            let highlightedRadius = radius + shift
+            let highlightedRadius = radius + shift * CGFloat(phaseH)
             
             let accountForSliceSpacing = sliceSpace > 0.0 && sliceAngle <= 180.0
             
