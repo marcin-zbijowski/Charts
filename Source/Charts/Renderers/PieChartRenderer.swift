@@ -356,7 +356,7 @@ open class PieChartRenderer: DataRenderer
 
                 angle = angle + angleOffset
 
-                let transformedAngle = rotationAngle + angle * CGFloat(phaseY) + (entryNeedsHighlight ? dataSet.selectionShift * CGFloat(phaseH): 0)
+                let transformedAngle = rotationAngle + angle * CGFloat(phaseY)// + (entryNeedsHighlight ? dataSet.selectionShift * CGFloat(phaseH): 0)
                 
                 let value = usePercentValuesEnabled ? e.y / yValueSum * 100.0 : e.y
 
