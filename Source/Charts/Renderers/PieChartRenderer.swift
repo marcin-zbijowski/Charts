@@ -687,7 +687,7 @@ open class PieChartRenderer: DataRenderer
         let radius = chart.radius
         let drawInnerArc = chart.drawHoleEnabled && !chart.drawSlicesUnderHoleEnabled
         let userInnerRadius = drawInnerArc ? radius * chart.holeRadiusPercent : 0.0
-        let drawShadows = chart.drawShadowsEnabled
+        let drawShadows = chart.drawHighlightShadowsEnabled
         let shadowOffset = chart.shadowOffset
         let shadowBlur = chart.shadowBlur
 

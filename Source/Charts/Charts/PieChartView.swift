@@ -75,6 +75,9 @@ open class PieChartView: PieRadarChartViewBase
     /// draw shadows under pie slices
     fileprivate var _drawShadowsEnabled: Bool = false
 
+    /// draw shadows under highlighed pie slices
+    fileprivate var _drawHighlightShadowsEnabled: Bool = false
+
     /// Shadow offset, default value = 0, 10
     fileprivate var _shadowOffset: CGSize = CGSize(width: 0, height: 10)
 
@@ -670,6 +673,18 @@ open class PieChartView: PieRadarChartViewBase
         set
         {
             _drawShadowsEnabled = newValue
+            setNeedsDisplay()
+        }
+    }
+
+    open var drawHighlightShadowsEnabled: Bool {
+        get
+        {
+            return _drawHighlightShadowsEnabled
+        }
+        set
+        {
+            _drawHighlightShadowsEnabled = newValue
             setNeedsDisplay()
         }
     }
