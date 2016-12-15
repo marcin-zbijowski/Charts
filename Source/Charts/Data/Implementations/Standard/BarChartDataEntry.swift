@@ -24,6 +24,8 @@ open class BarChartDataEntry: ChartDataEntry
     
     /// the sum of all positive values this entry (if stacked) contains
     fileprivate var _positiveSum: Double = 0.0
+
+    fileprivate var _rounded: Bool = false
     
     public required init()
     {
@@ -89,6 +91,15 @@ open class BarChartDataEntry: ChartDataEntry
     open var positiveSum: Double
     {
         return _positiveSum
+    }
+
+    open var rounded: Bool {
+        get {
+            return _rounded
+        }
+        set {
+            _rounded = newValue
+        }
     }
 
     open func calcPosNegSum()
