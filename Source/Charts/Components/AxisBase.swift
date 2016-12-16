@@ -26,7 +26,9 @@ open class AxisBase: ComponentBase
     
     open var labelFont = NSUIFont.systemFont(ofSize: 10.0)
     open var labelTextColor = NSUIColor.black
-    
+    open var secondLineLabelFont = NSUIFont.systemFont(ofSize: 10.0)
+    open var secondLineLabelTextColor = NSUIColor.black
+
     open var axisLineColor = NSUIColor.gray
     open var axisLineWidth = CGFloat(0.5)
     open var axisLineDashPhase = CGFloat(0.0)
@@ -133,7 +135,7 @@ open class AxisBase: ComponentBase
         for i in 0 ..< entries.count
         {
             let text = getFormattedLabel(i)
-            
+
             if longest.characters.count < text.characters.count
             {
                 longest = text

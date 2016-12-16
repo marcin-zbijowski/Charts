@@ -193,6 +193,9 @@ open class XAxisRenderer: AxisRendererBase
         let labelAttrs = [NSFontAttributeName: xAxis.labelFont,
             NSForegroundColorAttributeName: xAxis.labelTextColor,
             NSParagraphStyleAttributeName: paraStyle] as [String : NSObject]
+        let secondLabelAttrs = [NSFontAttributeName: xAxis.secondLineLabelFont,
+                          NSForegroundColorAttributeName: xAxis.secondLineLabelTextColor,
+                          NSParagraphStyleAttributeName: paraStyle] as [String : NSObject]
         let labelRotationAngleRadians = xAxis.labelRotationAngle * ChartUtils.Math.FDEG2RAD
         
         let centeringEnabled = xAxis.isCenterAxisLabelsEnabled
@@ -226,7 +229,7 @@ open class XAxisRenderer: AxisRendererBase
             
             if viewPortHandler.isInBoundsX(position.x)
             {
-                let label = xAxis.valueFormatter?.stringForValue(xAxis.entries[i], axis: xAxis) ?? ""
+                var label = xAxis.valueFormatter?.stringForValue(xAxis.entries[i], axis: xAxis) ?? ""
 
                 let labelns = label as NSString
                 
@@ -249,7 +252,15 @@ open class XAxisRenderer: AxisRendererBase
                         position.x += width / 2.0
                     }
                 }
-                
+
+                var secondLabel: String? = nil
+                if let newLineRange = label.range(of: "\n") {
+                    secondLabel = label.substring(from: newLineRange.lowerBound)
+                    label = label.substring(to: newLineRange.lowerBound)
+                    print(#function, "FIRST LABEL  = \"\(label)\"")
+                    print(#function, "SECOND LABEL = \"\(secondLabel)\"")
+                }
+
                 drawLabel(context: context,
                           formattedLabel: label,
                           x: position.x,
@@ -258,6 +269,17 @@ open class XAxisRenderer: AxisRendererBase
                           constrainedToSize: labelMaxSize,
                           anchor: anchor,
                           angleRadians: labelRotationAngleRadians)
+                if let secondLabel = secondLabel {
+                    drawLabel(context: context,
+                              formattedLabel: secondLabel,
+                              x: position.x,
+                              y: pos + labelMaxSize.height,
+                              attributes: secondLabelAttrs,
+                              constrainedToSize: labelMaxSize,
+                              anchor: anchor,
+                              angleRadians: labelRotationAngleRadians)
+
+                }
             }
         }
     }
