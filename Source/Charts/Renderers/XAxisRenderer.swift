@@ -255,10 +255,8 @@ open class XAxisRenderer: AxisRendererBase
 
                 var secondLabel: String? = nil
                 if let newLineRange = label.range(of: "\n") {
-                    secondLabel = label.substring(from: newLineRange.lowerBound)
+                    secondLabel = label.substring(from: label.index(after: newLineRange.lowerBound))
                     label = label.substring(to: newLineRange.lowerBound)
-                    print(#function, "FIRST LABEL  = \"\(label)\"")
-                    print(#function, "SECOND LABEL = \"\(secondLabel)\"")
                 }
 
                 drawLabel(context: context,
