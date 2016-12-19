@@ -201,7 +201,7 @@ open class XAxisRenderer: AxisRendererBase
         let centeringEnabled = xAxis.isCenterAxisLabelsEnabled
 
         let valueToPixelMatrix = transformer.valueToPixelMatrix
-        
+
         var position = CGPoint(x: 0.0, y: 0.0)
         
         var labelMaxSize = CGSize()
@@ -226,7 +226,7 @@ open class XAxisRenderer: AxisRendererBase
             
             position.y = 0.0
             position = position.applying(valueToPixelMatrix)
-            
+
             if viewPortHandler.isInBoundsX(position.x)
             {
                 var label = xAxis.valueFormatter?.stringForValue(xAxis.entries[i], axis: xAxis) ?? ""
@@ -268,10 +268,11 @@ open class XAxisRenderer: AxisRendererBase
                           anchor: anchor,
                           angleRadians: labelRotationAngleRadians)
                 if let secondLabel = secondLabel {
+                    let labelSize = labelns.size(attributes: labelAttrs)
                     drawLabel(context: context,
                               formattedLabel: secondLabel,
                               x: position.x,
-                              y: pos + (labelMaxSize.height * 3),
+                              y: pos + labelSize.height,
                               attributes: secondLabelAttrs,
                               constrainedToSize: labelMaxSize,
                               anchor: anchor,
