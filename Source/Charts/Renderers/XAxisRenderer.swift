@@ -271,7 +271,7 @@ open class XAxisRenderer: AxisRendererBase
                     drawLabel(context: context,
                               formattedLabel: secondLabel,
                               x: position.x,
-                              y: pos + labelMaxSize.height+labelMaxSize.height,
+                              y: pos + (labelMaxSize.height * 3),
                               attributes: secondLabelAttrs,
                               constrainedToSize: labelMaxSize,
                               anchor: anchor,
