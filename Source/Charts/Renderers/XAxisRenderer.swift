@@ -268,7 +268,7 @@ open class XAxisRenderer: AxisRendererBase
                           anchor: anchor,
                           angleRadians: labelRotationAngleRadians)
                 if let secondLabel = secondLabel {
-                    let labelSize = labelns.size(attributes: labelAttrs)
+                    let labelSize = (label as NSString).size(attributes: labelAttrs)
                     drawLabel(context: context,
                               formattedLabel: secondLabel,
                               x: position.x,
