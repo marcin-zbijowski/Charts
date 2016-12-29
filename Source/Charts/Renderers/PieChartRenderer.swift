@@ -426,6 +426,26 @@ open class PieChartRenderer: DataRenderer
                         labelPoint = CGPoint(x: pt2.x + 15, y: pt2.y - (lineHeight < entryLineHeight ? entryLineHeight : lineHeight))
                     }
 
+                    var textWidth: CGFloat = 0
+                    if let text = pe?.label {
+                        let attributes = [NSFontAttributeName: entryLabelFont,
+                                          NSForegroundColorAttributeName: entryLabelColor ?? valueTextColor]
+                        textWidth = text.size(attributes: attributes).width
+                    }
+
+                    let valueWidth = valueText.size(attributes: [NSFontAttributeName: valueFont, NSForegroundColorAttributeName: valueTextColor]).width
+
+                    if valueWidth > textWidth {
+                        textWidth = valueWidth
+                    }
+                    var chartWidth = chart.circleBox.width
+                    if let contentWidth = self.viewPortHandler?.contentWidth {
+                        chartWidth = contentWidth
+                    }
+                    if labelPoint.x + textWidth > chartWidth {
+                        labelPoint.x -= labelPoint.x + textWidth - chartWidth
+                    }
+
                     if dataSet.valueLineColor != nil
                     {
                         context.setStrokeColor(dataSet.valueLineColor!.cgColor)

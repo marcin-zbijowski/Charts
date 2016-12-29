@@ -83,7 +83,7 @@ open class ChartUtils
     open class func drawText(context: CGContext, text: String, point: CGPoint, align: NSTextAlignment, attributes: [String : AnyObject]?)
     {
         var point = point
-        
+
         if align == .center
         {
             point.x -= text.size(attributes: attributes).width / 2.0
@@ -92,7 +92,11 @@ open class ChartUtils
         {
             point.x -= text.size(attributes: attributes).width
         }
-        
+
+        if point.x < 0.0 {
+            point.x = 0
+        }
+
         NSUIGraphicsPushContext(context)
         
         (text as NSString).draw(at: point, withAttributes: attributes)
