@@ -14,6 +14,7 @@ import Foundation
 import Charts
 #endif
 import Realm
+import RealmSwift
 import Realm.Dynamic
 
 open class RealmBaseDataSet: ChartBaseDataSet
@@ -68,9 +69,33 @@ open class RealmBaseDataSet: ChartBaseDataSet
         initialize()
     }
     
+    public convenience init(results: Results<Object>?, xValueField: String?, yValueField: String, label: String?)
+    {
+        var converted: RLMResults<RLMObject>?
+        
+        if results != nil
+        {
+            converted = ObjectiveCSupport.convert(object: results!)
+        }
+        
+        self.init(results: converted, xValueField: xValueField, yValueField: yValueField, label: label)
+    }
+    
     public convenience init(results: RLMResults<RLMObject>?, yValueField: String, label: String?)
     {
         self.init(results: results, xValueField: nil, yValueField: yValueField, label: label)
+    }
+    
+    public convenience init(results: Results<Object>?, yValueField: String, label: String?)
+    {
+        var converted: RLMResults<RLMObject>?
+        
+        if results != nil
+        {
+            converted = ObjectiveCSupport.convert(object: results!)
+        }
+        
+        self.init(results: converted, yValueField: yValueField, label: label)
     }
     
     public convenience init(results: RLMResults<RLMObject>?, xValueField: String?, yValueField: String)
@@ -78,9 +103,33 @@ open class RealmBaseDataSet: ChartBaseDataSet
         self.init(results: results, xValueField: xValueField, yValueField: yValueField, label: "DataSet")
     }
     
+    public convenience init(results: Results<Object>?, xValueField: String?, yValueField: String)
+    {
+        var converted: RLMResults<RLMObject>?
+        
+        if results != nil
+        {
+            converted = ObjectiveCSupport.convert(object: results!)
+        }
+        
+        self.init(results: converted, xValueField: xValueField, yValueField: yValueField)
+    }
+    
     public convenience init(results: RLMResults<RLMObject>?, yValueField: String)
     {
         self.init(results: results, yValueField: yValueField)
+    }
+    
+    public convenience init(results: Results<Object>?, yValueField: String)
+    {
+        var converted: RLMResults<RLMObject>?
+        
+        if results != nil
+        {
+            converted = ObjectiveCSupport.convert(object: results!)
+        }
+        
+        self.init(results: converted, yValueField: yValueField)
     }
     
     public init(realm: RLMRealm?, modelName: String, resultsWhere: String, xValueField: String?, yValueField: String, label: String?)
@@ -103,9 +152,33 @@ open class RealmBaseDataSet: ChartBaseDataSet
         initialize()
     }
     
+    public convenience init(realm: Realm?, modelName: String, resultsWhere: String, xValueField: String?, yValueField: String, label: String?)
+    {
+        var converted: RLMRealm?
+        
+        if realm != nil
+        {
+            converted = ObjectiveCSupport.convert(object: realm!)
+        }
+        
+        self.init(realm: converted, modelName: modelName, resultsWhere: resultsWhere, xValueField: xValueField, yValueField: yValueField, label: label)
+    }
+    
     public convenience init(realm: RLMRealm?, modelName: String, resultsWhere: String, yValueField: String, label: String?)
     {
         self.init(realm: realm, modelName: modelName, resultsWhere: resultsWhere, xValueField: nil, yValueField: yValueField, label: label)
+    }
+    
+    public convenience init(realm: Realm?, modelName: String, resultsWhere: String, yValueField: String, label: String?)
+    {
+        var converted: RLMRealm?
+        
+        if realm != nil
+        {
+            converted = ObjectiveCSupport.convert(object: realm!)
+        }
+        
+        self.init(realm: converted, modelName: modelName, resultsWhere: resultsWhere, yValueField: yValueField, label: label)
     }
     
     open func loadResults(realm: RLMRealm, modelName: String)
@@ -132,6 +205,18 @@ open class RealmBaseDataSet: ChartBaseDataSet
         notifyDataSetChanged()
     }
     
+    @nonobjc
+    open func loadResults(realm: Realm, modelName: String)
+    {
+        loadResults(realm: ObjectiveCSupport.convert(object: realm), modelName: modelName)
+    }
+    
+    @nonobjc
+    open func loadResults(realm: Realm, modelName: String, predicate: NSPredicate?)
+    {
+        loadResults(realm: ObjectiveCSupport.convert(object: realm), modelName: modelName, predicate: predicate)
+    }
+    
     // MARK: - Data functions and accessors
     
     internal var _results: RLMResults<RLMObject>?
@@ -139,11 +224,11 @@ open class RealmBaseDataSet: ChartBaseDataSet
     internal var _xValueField: String?
     internal var _cache = [ChartDataEntry]()
     
-    internal var _yMax: Double = -DBL_MAX
-    internal var _yMin: Double = DBL_MAX
+    internal var _yMax: Double = -Double.greatestFiniteMagnitude
+    internal var _yMin: Double = Double.greatestFiniteMagnitude
     
-    internal var _xMax: Double = -DBL_MAX
-    internal var _xMin: Double = DBL_MAX
+    internal var _xMax: Double = -Double.greatestFiniteMagnitude
+    internal var _xMin: Double = Double.greatestFiniteMagnitude
     
     /// Makes sure that the cache is populated for the specified range
     internal func buildCache()
@@ -190,10 +275,10 @@ open class RealmBaseDataSet: ChartBaseDataSet
             return
         }
         
-        _yMax = -DBL_MAX
-        _yMin = DBL_MAX
-        _xMax = -DBL_MAX
-        _xMin = DBL_MAX
+        _yMax = -Double.greatestFiniteMagnitude
+        _yMin = Double.greatestFiniteMagnitude
+        _xMax = -Double.greatestFiniteMagnitude
+        _xMin = Double.greatestFiniteMagnitude
         
         for e in _cache
         {
