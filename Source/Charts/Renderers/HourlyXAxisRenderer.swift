@@ -9,7 +9,8 @@
 import UIKit
 import Charts
 
-class HourlyXAxisRenderer: XAxisRenderer {
+@objc(HourlyXAxisRenderer)
+open class HourlyXAxisRenderer: XAxisRenderer {
 
     private class func roundToNextSignificant(number: Double) -> Double
     {
@@ -57,7 +58,6 @@ class HourlyXAxisRenderer: XAxisRenderer {
         // Find out how much spacing (in y value space) between axis values
         let rawInterval = range / Double(labelCount)
         var interval = round(rawInterval / 3600) * 3600
-//        var interval = Double(roundf(Float(rawInterval / 3600)) * 3600)
 
         // If granularity is enabled, then do not allow the interval to go below specified granularity.
         // This is used to avoid repeated values when rounding values for display.
