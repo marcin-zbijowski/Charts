@@ -64,4 +64,6 @@ public protocol IPieChartDataSet: IChartDataSet
     /// if both value and label are placed outside, which one should be on top
     var drawLabelAboveValue: Bool { get set }
 
+    /// get/sets the color for the highlighted sector
+    var highlightColor: NSUIColor? { get set }
 }
