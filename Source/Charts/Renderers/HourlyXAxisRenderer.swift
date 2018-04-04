@@ -58,8 +58,8 @@ open class HourlyXAxisRenderer: XAxisRenderer {
         // Find out how much spacing (in y value space) between axis values
         let rawInterval = range / Double(labelCount)
         var interval = round(rawInterval / 3600) * 3600
-        if rawInterval < 3600 {
-            interval = 1200
+        if rawInterval < 1800 {
+            interval = 1800
         }
 
         // If granularity is enabled, then do not allow the interval to go below specified granularity.
